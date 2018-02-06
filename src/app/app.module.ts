@@ -12,6 +12,7 @@ import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { QrscannerPage } from '../pages/qrscanner/qrscanner';
 import { LoaderProvider } from '../providers/loader/loader';
+import { HttpProvider } from '../providers/http/http.service';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { LoaderProvider } from '../providers/loader/loader';
     SplashScreen,
     QRScanner,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LoaderProvider
+    LoaderProvider,
+    HttpProvider
   ]
 })
 export class AppModule {}

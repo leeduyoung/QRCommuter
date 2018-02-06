@@ -8,7 +8,7 @@ import { LoginPage } from '../pages/login/login';
 
 import * as firebase from 'firebase';
 
-import { firebaseConfig } from '../config/config';
+import { FirebaseConfig } from '../config/config';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,7 +23,7 @@ export class MyApp {
       splashScreen.hide();
     });
 
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(FirebaseConfig);
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.rootPage = HomePage;

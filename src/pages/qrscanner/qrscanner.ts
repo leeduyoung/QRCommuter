@@ -12,10 +12,12 @@ export class QrscannerPage {
 
   clubInfo: any;
   // loading: Loading;
+  method: any;
 
   // constructor(public navCtrl: NavController, public qrScanner: QRScanner, private commonService: CommonService) {
-  constructor(public navCtrl: NavController, public qrScanner: QRScanner) {
+  constructor(public navCtrl: NavController, public qrScanner: QRScanner, private navParam: NavParams) {
     // this.loading = this.commonService.presentLoading();
+    this.method = this.navParam.get('method');
     this.qrscanner();
   }
 
@@ -33,27 +35,35 @@ export class QrscannerPage {
           // start scanning
           let scanSub = this.qrScanner.scan().subscribe((qrScannerData: string) => {
             console.log("Scanned data: ", qrScannerData);
-
-            if(qrScannerData == '' || qrScannerData == null) {
-              console.log('올바르지 않은 QR코드 입니다.');
-              this.qrScanner.hide(); // hide camera preview
-              scanSub.unsubscribe(); // stop scanning
-              this.navCtrl.pop();
-              return;
-            }
             
-            try {
-              this.clubInfo = JSON.parse(atob(qrScannerData));
-              console.log(this.clubInfo);              
-
-              this.qrScanner.hide(); // hide camera preview
-              scanSub.unsubscribe(); // stop scanning
-              // this.navCtrl.push(CheckInReady, { clubId: this.clubInfo.rf_club_id });
-              document.querySelector(".tabbar.show-tabbar")['style'].display = 'flex';
-            } catch (error) {
-              // this.commonService.qrPresentAlert('QR코드 오류','해당 시설 QR코드가 아닙니다. 시설 QR코드 확인 후 다시 시도해 주세요.', this.navCtrl);
-              throw new Error('qrcode parsing error');
+            if(qrScannerData == 'rfapp') {
+              // TODO: 출/퇴근 처리
             }
+            else {
+              // TODO: error popup
+            }
+
+            // if(qrScannerData == '' || qrScannerData == null) {
+            //   console.log('올바르지 않은 QR코드 입니다.');
+            //   this.qrScanner.hide(); // hide camera preview
+            //   scanSub.unsubscribe(); // stop scanning
+            //   this.navCtrl.pop();
+            //   return;
+            // }
+            
+            // try {
+            //   this.clubInfo = JSON.parse(atob(qrScannerData));
+            //   console.log(this.clubInfo);              
+
+            //   this.qrScanner.hide(); // hide camera preview
+            //   scanSub.unsubscribe(); // stop scanning
+            //   this.navCtrl.push(CheckInReady, { clubId: this.clubInfo.rf_club_id });
+            //   document.querySelector(".tabbar.show-tabbar")['style'].display = 'flex';
+
+            // } catch (error) {
+            //   // this.commonService.qrPresentAlert('QR코드 오류','해당 시설 QR코드가 아닙니다. 시설 QR코드 확인 후 다시 시도해 주세요.', this.navCtrl);
+            //   throw new Error('qrcode parsing error');
+            // }
           }
           , (error: any) => {
             console.log('error');

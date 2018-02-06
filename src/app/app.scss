@@ -19,3 +19,20 @@
 .nav-decor {
     background-color: transparent !important;
 }
+
+ion-icon {
+    &[class*="rf-"] {
+      // Instead of using the font-based icons
+      // We're applying SVG masks
+      mask-size: contain;
+      mask-position: 50% 50%;
+      mask-repeat: no-repeat;
+      background: currentColor;
+      width: 1em;
+      height: 1em;
+    }
+    // custom icons
+    &[class*="rf-enter"] {
+      mask-image: url(../assets/imgs/enter.svg);
+    }
+  }

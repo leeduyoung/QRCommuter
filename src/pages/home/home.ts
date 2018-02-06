@@ -4,6 +4,7 @@ import { NavController, AlertController } from 'ionic-angular';
 import * as firebase from 'firebase';
 
 import { LoaderProvider } from '../../providers/loader/loader';
+import { QrscannerPage } from '../qrscanner/qrscanner';
 
 @Component({
   selector: 'page-home',
@@ -58,5 +59,19 @@ export class HomePage {
     .then(() => {
       this.loader.hide();
     });
+  }
+
+  goQrcode(method) {
+    console.log(method);
+
+    if(method == 'checkin') {
+      this.navCtrl.push(QrscannerPage, {method: 'checkin'}, {animate: false});
+    }
+    else if (method == 'checkout') {
+      this.navCtrl.push(QrscannerPage, {method: 'checkout'}, {animate: false});
+    }
+    else {
+      // empty method..
+    }
   }
 }

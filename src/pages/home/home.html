@@ -34,3 +34,17 @@
 
   </ion-card>
 </ion-content>
+
+<ion-fab bottom right>
+  <button ion-fab color="primary">
+    <div class="text">출/퇴근하기</div>
+  </button>
+  <ion-fab-list side="top">
+    <button ion-fab (click)="goQrcode('checkin')" color="secondary">
+      <div class="text">출근</div>
+    </button>
+    <button ion-fab (click)="goQrcode('checkout')" color="danger">
+      <div class="text">퇴근</div>
+    </button>
+  </ion-fab-list>
+</ion-fab>

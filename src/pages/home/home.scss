@@ -1,3 +1,22 @@
 page-home {
+    ion-fab {
+        .fab {
+            width: 80px;
+            height: 80px;
 
+            ion-icon {
+              font-size: 4.4rem;
+              line-height: 80px;
+            }
+
+            .text {
+                font-size: 12px;
+                font-weight: bold;
+            }
+        }
+
+        ion-fab-list {
+          margin: 85px 0px;
+        }
+    }
 }
