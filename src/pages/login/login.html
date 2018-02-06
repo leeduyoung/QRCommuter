@@ -1,0 +1,28 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>
+      QRCommuter
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-item>
+    <ion-label floating>Email</ion-label>
+    <ion-input type="text" [(ngModel)]="user.email"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label floating>Password</ion-label>
+    <ion-input type="password" [(ngModel)]="user.password"></ion-input>
+  </ion-item>
+
+  <button ion-button block color="primary" class="login-button" (click)="login()">로그인</button>
+  <button ion-button block color="secondary" class="signup-button" (click)="goSignup()">회원가입</button>
+  <button ion-button block color="danger" class="reset-button" (click)="goResetPassword()">비밀번호 재설정</button>
+
+</ion-content>

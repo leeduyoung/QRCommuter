@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      QRCommuter
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="logout()">
+        <ion-icon name="log-out"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-card>
+
+    <ion-card-header>
+      {{user.name}}님, 반갑습니다!
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-item>
+        <ion-label floating color="danger">Name</ion-label>
+        <ion-input type="text" [value]="user.name" readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label floating color="danger">Email</ion-label>
+        <ion-input type="text" [value]="user.email" readonly></ion-input>
+      </ion-item>
+
+    </ion-card-content>
+
+  </ion-card>
+</ion-content>
