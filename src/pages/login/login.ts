@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { SignupPage } from '../signup/signup';
+
+import { Toast } from '@ionic-native/toast';
 
 import * as firebase from 'firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
+import { ConstVariables } from '../../providers/const';
 
 @IonicPage()
 @Component({
@@ -17,7 +20,7 @@ export class LoginPage {
     password: ''
   };
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private loader: LoaderProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private loader: LoaderProvider, private platform: Platform, private toast: Toast) {
   }
 
   ionViewDidLoad() {
@@ -34,6 +37,9 @@ export class LoginPage {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(error);
+
+        if(!this.platform.is('mobileweb'))
+          this.toast.show(ConstVariables.loginErrorMessage, ConstVariables.errorLoadingTime, 'center').subscribe(toast => {console.log(toast);});
       })
       .then(() => {
         this.loader.hide();
@@ -81,6 +87,8 @@ export class LoginPage {
         // Email sent.
       }).catch(error => {
         console.log(error);
+        if(!this.platform.is('mobileweb'))
+          this.toast.show(ConstVariables.sendEmailErrorMessage, ConstVariables.errorLoadingTime, 'center').subscribe(toast => {console.log(toast);});
       });
   }
 }

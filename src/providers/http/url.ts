@@ -13,8 +13,7 @@ export class Url {
   getUrl() {
     let urls = {
 
-    //   getTest: this.host + "/v2/test", // test
-    //   signIn: this.host + "/" + this.apiVersion + "/account/authorization/signin", // 로그인 & 자동 로그인
+      commute: this.host + "/" + this.apiVersion + "/commute", // 직원 출퇴근용 api
 
     };
     return urls;

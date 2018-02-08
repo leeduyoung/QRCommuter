@@ -5,6 +5,7 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { QRScanner } from '@ionic-native/qr-scanner';
+import { Toast } from '@ionic-native/toast';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -44,6 +45,7 @@ import { HttpProvider } from '../providers/http/http.service';
     StatusBar,
     SplashScreen,
     QRScanner,
+    Toast,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoaderProvider,
     HttpProvider

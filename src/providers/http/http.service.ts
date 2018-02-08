@@ -30,27 +30,12 @@ export class HttpProvider {
     this.headers.delete(key);
   }
 
-  // test() {
-  //   let headers = new Headers();
-  //   headers.append('Content-Type', 'application/json');
-  //   return this.http.get(this.url.getUrl().getTest, {headers: headers}).map(res => res.json());
-  // }
-
-  // signIn(user) {
-  //   let body = {
-  //     username: user.id,
-  //     password: user.password,
-  //     grant_type: Environment.grantTypePassword,
-  //     client_id: Environment.clientId,
-  //     client_secret: Environment.clientSecret,
-  //     device_model: this.dataFactory.getDeviceModel().model,
-  //     device_platform: this.dataFactory.getDeviceModel().platform,
-  //     device_uuid: this.dataFactory.getDeviceModel().uuid,
-  //     device_manufacturer: this.dataFactory.getDeviceModel().manufacturer,
-  //     device_version: this.dataFactory.getDeviceModel().version,
-  //     app_version: this.dataFactory.getAppModel().versionNumber
-  //   }
-  //   return this.http.post(this.urlFactory.getUrl().signIn, body, {headers: this.headers}).map(res => res.json()).catch(err => Observable.throw(err.json()));
-  // }
+  commute(data) {
+    let body = {
+      email: data.email,
+      kind: data.kind
+    }
+    return this.http.post(this.url.getUrl().commute, body, {headers: this.headers}).map(res => res.json());
+  }
 
 }

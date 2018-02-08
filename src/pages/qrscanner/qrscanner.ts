@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
+import { HttpProvider } from '../../providers/http/http.service';
 
 
 @IonicPage()
@@ -15,7 +16,7 @@ export class QrscannerPage {
   method: any;
 
   // constructor(public navCtrl: NavController, public qrScanner: QRScanner, private commonService: CommonService) {
-  constructor(public navCtrl: NavController, public qrScanner: QRScanner, private navParam: NavParams) {
+  constructor(public navCtrl: NavController, public qrScanner: QRScanner, private navParam: NavParams, private httpProvider: HttpProvider) {
     // this.loading = this.commonService.presentLoading();
     this.method = this.navParam.get('method');
     this.qrscanner();
@@ -38,6 +39,15 @@ export class QrscannerPage {
             
             if(qrScannerData == 'rfapp') {
               // TODO: 출/퇴근 처리
+              this.httpProvider.commute({email: 'dy.lee@hnblife.co.kr', kind: 'in'})
+                .subscribe(
+                  response => {
+                    this.navCtrl.popToRoot();
+                  },
+                  error => {
+                    console.log(error);
+                  }
+                );
             }
             else {
               // TODO: error popup
