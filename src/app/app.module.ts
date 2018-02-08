@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { HttpModule } from '@angular/http';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -14,6 +15,8 @@ import { SignupPage } from '../pages/signup/signup';
 import { QrscannerPage } from '../pages/qrscanner/qrscanner';
 import { LoaderProvider } from '../providers/loader/loader';
 import { HttpProvider } from '../providers/http/http.service';
+import { Url } from '../providers/http/url';
+import { GlobalsProvider } from '../providers/globals';
 
 @NgModule({
   declarations: [
@@ -25,6 +28,7 @@ import { HttpProvider } from '../providers/http/http.service';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp, {
       platforms: {
         ios: {
@@ -48,7 +52,9 @@ import { HttpProvider } from '../providers/http/http.service';
     Toast,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     LoaderProvider,
-    HttpProvider
+    HttpProvider,
+    Url,
+    GlobalsProvider
   ]
 })
 export class AppModule {}

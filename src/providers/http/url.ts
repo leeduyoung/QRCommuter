@@ -7,7 +7,7 @@ export class Url {
   constructor() {
     this.apiVersion = AppConfig.apiVersion;
     this.host = AppConfig.production; //실 서버
-    this.host = AppConfig.developer; //테스트 서버
+    // this.host = AppConfig.developer; //테스트 서버
   }
 
   getUrl() {

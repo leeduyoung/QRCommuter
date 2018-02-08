@@ -5,6 +5,7 @@ import * as firebase from 'firebase';
 
 import { LoaderProvider } from '../../providers/loader/loader';
 import { QrscannerPage } from '../qrscanner/qrscanner';
+import { GlobalsProvider } from '../../providers/globals';
 
 @Component({
   selector: 'page-home',
@@ -14,16 +15,21 @@ export class HomePage {
 
   user: any = {
     name: '',
-    email: ''
+    email: '',
+    inTime: '',
+    outTime: ''
   }
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private loader: LoaderProvider) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private loader: LoaderProvider, private globalsProvider: GlobalsProvider) {
   }
 
   ngOnInit() {
     let user = firebase.auth().currentUser;
     this.user.name = user.displayName;
     this.user.email = user.email;
+    this.user.inTime = (this.globalsProvider.inTime != null) ? this.globalsProvider.inTime : '데이터가 없습니다.';
+    this.user.outTime = (this.globalsProvider.outTime != null) ? this.globalsProvider.outTime : '데이터가 없습니다.';
+    this.globalsProvider.user = user;
   }
 
   logout() {
@@ -62,13 +68,11 @@ export class HomePage {
   }
 
   goQrcode(method) {
-    console.log(method);
-
-    if(method == 'checkin') {
-      this.navCtrl.push(QrscannerPage, {method: 'checkin'}, {animate: false});
+    if(method == 'in') {
+      this.navCtrl.push(QrscannerPage, {email: this.user.email, method: method}, {animate: false});
     }
-    else if (method == 'checkout') {
-      this.navCtrl.push(QrscannerPage, {method: 'checkout'}, {animate: false});
+    else if (method == 'out') {
+      this.navCtrl.push(QrscannerPage, {email: this.user.email, method: method}, {animate: false});
     }
     else {
       // empty method..

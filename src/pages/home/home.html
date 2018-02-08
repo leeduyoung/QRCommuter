@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="primary">
     <ion-title>
-      QRCommuter
+      리프레쉬오피스
     </ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="logout()">
@@ -15,19 +15,20 @@
   <ion-card>
 
     <ion-card-header>
-      {{user.name}}님, 반갑습니다!
+      <div *ngIf="user?.name != null">{{user?.name}}님, 반갑습니다!</div>
+      <div *ngIf="user?.name == null">회원님, 반갑습니다!</div>
     </ion-card-header>
 
     <ion-card-content>
 
       <ion-item>
-        <ion-label floating color="danger">Name</ion-label>
-        <ion-input type="text" [value]="user.name" readonly></ion-input>
+        <ion-label floating color="danger">출근</ion-label>
+        <ion-input type="text" [value]="user?.inTime" readonly></ion-input>
       </ion-item>
 
       <ion-item>
-        <ion-label floating color="danger">Email</ion-label>
-        <ion-input type="text" [value]="user.email" readonly></ion-input>
+        <ion-label floating color="danger">퇴근</ion-label>
+        <ion-input type="text" [value]="user?.outTime" readonly></ion-input>
       </ion-item>
 
     </ion-card-content>
@@ -40,10 +41,10 @@
     <div class="text">출/퇴근하기</div>
   </button>
   <ion-fab-list side="top">
-    <button ion-fab (click)="goQrcode('checkin')" color="secondary">
+    <button ion-fab (click)="goQrcode('in')" color="secondary">
       <div class="text">출근</div>
     </button>
-    <button ion-fab (click)="goQrcode('checkout')" color="danger">
+    <button ion-fab (click)="goQrcode('out')" color="danger">
       <div class="text">퇴근</div>
     </button>
   </ion-fab-list>

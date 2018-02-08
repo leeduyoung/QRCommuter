@@ -39,7 +39,7 @@ export class LoginPage {
         console.log(error);
 
         if(!this.platform.is('mobileweb'))
-          this.toast.show(ConstVariables.loginErrorMessage, ConstVariables.errorLoadingTime, 'center').subscribe(toast => {console.log(toast);});
+          this.toast.show(ConstVariables.loginErrorMessage, ConstVariables.errorLoadingTime, 'bottom').subscribe(toast => {console.log(toast);});
       })
       .then(() => {
         this.loader.hide();

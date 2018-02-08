@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 
 import * as firebase from 'firebase';
+import * as moment from "moment";
 
 import { FirebaseConfig } from '../config/config';
 
@@ -15,7 +16,6 @@ import { FirebaseConfig } from '../config/config';
 })
 export class MyApp {
   rootPage: any;
-
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
 
     platform.ready().then(() => {
@@ -23,6 +23,7 @@ export class MyApp {
       splashScreen.hide();
     });
 
+    moment.locale("ko");
     firebase.initializeApp(FirebaseConfig);
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {

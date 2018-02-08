@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import * as firebase from 'firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
+import { GlobalsProvider } from '../../providers/globals';
 
 @IonicPage()
 @Component({
@@ -17,7 +18,7 @@ export class SignupPage {
     password: ''
   }
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private loader: LoaderProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private loader: LoaderProvider, private globalsProvider: GlobalsProvider) {
   }
 
   ngOnInit() {
@@ -44,7 +45,7 @@ export class SignupPage {
 
   firebaseUpdateProfile() {
     let user = firebase.auth().currentUser;
-
+    this.globalsProvider.user = user;
     user.updateProfile({
       displayName: this.user.name,
       photoURL: ""

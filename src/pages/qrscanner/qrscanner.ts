@@ -1,7 +1,14 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
+import { Toast } from '@ionic-native/toast';
+
+import * as moment from 'moment';
+
 import { HttpProvider } from '../../providers/http/http.service';
+import { ConstVariables } from '../../providers/const';
+import { GlobalsProvider } from '../../providers/globals';
 
 
 @IonicPage()
@@ -12,72 +19,69 @@ import { HttpProvider } from '../../providers/http/http.service';
 export class QrscannerPage {
 
   clubInfo: any;
-  // loading: Loading;
   method: any;
+  kind: string;
+  email: string;
 
-  // constructor(public navCtrl: NavController, public qrScanner: QRScanner, private commonService: CommonService) {
-  constructor(public navCtrl: NavController, public qrScanner: QRScanner, private navParam: NavParams, private httpProvider: HttpProvider) {
-    // this.loading = this.commonService.presentLoading();
+  constructor(public navCtrl: NavController, public qrScanner: QRScanner, private navParam: NavParams, private httpProvider: HttpProvider, private platform: Platform, private toast: Toast, private globalsProvider: GlobalsProvider) {
+    this.email = this.navParam.get('email');
     this.method = this.navParam.get('method');
-    this.qrscanner();
+    if (this.method == 'in') {
+      this.kind = '출근';
+    }
+    else {
+      this.kind = '퇴근';
+    }
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad QrscannerPage');
+    this.qrscanner();
   }
 
   qrscanner() {
-    // Optionally request the permission early
+
     this.qrScanner.prepare()
       .then((status: QRScannerStatus) => {
         if (status.authorized) {
-          console.log('Success to authorized camera permission'); // camera permission was granted
-
-          // start scanning
           let scanSub = this.qrScanner.scan().subscribe((qrScannerData: string) => {
             console.log("Scanned data: ", qrScannerData);
-            
-            if(qrScannerData == 'rfapp') {
-              // TODO: 출/퇴근 처리
-              this.httpProvider.commute({email: 'dy.lee@hnblife.co.kr', kind: 'in'})
+
+            if (qrScannerData == 'rfapp') {
+              this.httpProvider.commute({ email: this.email, kind: this.method })
                 .subscribe(
-                  response => {
-                    this.navCtrl.popToRoot();
-                  },
-                  error => {
-                    console.log(error);
+                response => {
+                  if (this.method == 'in') {
+                    this.globalsProvider.inTime = moment().format('YYYY년 MMMM Do, a h:mm:ss');
                   }
-                );
+                  else {
+                    this.globalsProvider.outTime = moment().format('YYYY년 MMMM Do, a h:mm:ss');
+                  }
+                  
+                  this.qrScanner.hide();
+                  scanSub.unsubscribe();
+                  this.navCtrl.popToRoot();
+                },
+                error => {
+                  console.log(error);
+                  this.qrScanner.hide();
+                  scanSub.unsubscribe();
+                  this.navCtrl.popToRoot();
+                  if (!this.platform.is('mobileweb'))
+                    this.toast.show('QR코드 오류. 잠시후 다시 시도해주세요. ' + error, ConstVariables.errorLoadingTime, 'center').subscribe(toast => { console.log(toast); });
+                });
             }
             else {
-              // TODO: error popup
+              if (!this.platform.is('mobileweb'))
+                this.toast.show('잘못된 QR코드 입니다. QR코드를 확인해주세요.', ConstVariables.errorLoadingTime, 'center').subscribe(toast => { console.log(toast); });
+
+              this.qrScanner.hide();
+              scanSub.unsubscribe();
+              this.navCtrl.popToRoot();
             }
-
-            // if(qrScannerData == '' || qrScannerData == null) {
-            //   console.log('올바르지 않은 QR코드 입니다.');
-            //   this.qrScanner.hide(); // hide camera preview
-            //   scanSub.unsubscribe(); // stop scanning
-            //   this.navCtrl.pop();
-            //   return;
-            // }
-            
-            // try {
-            //   this.clubInfo = JSON.parse(atob(qrScannerData));
-            //   console.log(this.clubInfo);              
-
-            //   this.qrScanner.hide(); // hide camera preview
-            //   scanSub.unsubscribe(); // stop scanning
-            //   this.navCtrl.push(CheckInReady, { clubId: this.clubInfo.rf_club_id });
-            //   document.querySelector(".tabbar.show-tabbar")['style'].display = 'flex';
-
-            // } catch (error) {
-            //   // this.commonService.qrPresentAlert('QR코드 오류','해당 시설 QR코드가 아닙니다. 시설 QR코드 확인 후 다시 시도해 주세요.', this.navCtrl);
-            //   throw new Error('qrcode parsing error');
-            // }
-          }
-          , (error: any) => {
-            console.log('error');
-            // this.commonService.qrPresentAlert('QR코드 오류','해당 시설 QR코드가 아닙니다. 시설 QR코드 확인 후 다시 시도해 주세요.', this.navCtrl);
+          }, (error: any) => {
+            console.log(error);
+            if (!this.platform.is('mobileweb'))
+              this.toast.show('QR코드 오류. 잠시후 다시 시도해주세요. ' + error, ConstVariables.errorLoadingTime, 'center').subscribe(toast => { console.log(toast); });
           });
 
           this.qrScanner.resumePreview();
@@ -86,37 +90,34 @@ export class QrscannerPage {
           this.qrScanner.show().then(
             (data: QRScannerStatus) => {
               console.log('data.showing: ', data.showing);
-              document.querySelector(".tabbar.show-tabbar")['style'].display = 'none';
             },
             error => {
               console.log(error);
-              // this.commonService.qrPresentAlert('카메라 권한 설정','카메라 사용 권한이 없습니다. 권한 설정 후 다시 시도해 주세요.', this.navCtrl);
+              if (!this.platform.is('mobileweb'))
+                this.toast.show('QR코드 오류. 잠시후 다시 시도해주세요. ' + error, ConstVariables.errorLoadingTime, 'center').subscribe(toast => { console.log(toast); });
             }
           );
 
-          // wait for user to scan something, then the observable callback will be called
         } else if (status.denied) {
-          // camera permission was permanently denied
-          // you must use QRScanner.openSettings() method to guide the user to the settings page
-          // then they can grant the permission from there
           console.log('denied');
+          this.navCtrl.popToRoot();
+          if (!this.platform.is('mobileweb'))
+            this.toast.show('QR코드 권한 오류. status: ' + status.denied, ConstVariables.errorLoadingTime, 'center').subscribe(toast => { console.log(toast); });
         } else {
-          // permission was denied, but not permanently. You can ask for permission again at a later time.
           console.log('else');
-        } 
+          if (!this.platform.is('mobileweb'))
+            this.toast.show('QR코드 오류. 잠시후 다시 시도해주세요.', ConstVariables.errorLoadingTime, 'center').subscribe(toast => { console.log(toast); });
+        }
       })
       .catch((error: any) => {
         console.log(error);
-        // this.commonService.qrPresentAlert('QR코드 오류','오류가 발생하였습니다. 잠시 후 다시 시도해 주세요.', this.navCtrl);
-      })
-      .then(() => {
-        // this.loading.dismiss();
+        if (!this.platform.is('mobileweb'))
+          this.toast.show('QR코드 오류. 잠시후 다시 시도해주세요. ' + error, ConstVariables.errorLoadingTime, 'center').subscribe(toast => { console.log(toast); });
       });
   }
 
   goBack() {
-    document.querySelector(".tabbar.show-tabbar")['style'].display = 'flex';
-    this.navCtrl.pop({animate: false});
+    this.navCtrl.pop({ animate: false });
   }
 
 }
