@@ -39,4 +39,7 @@ export class HttpProvider {
     return this.http.post(this.url.getUrl().commute, body, { headers: this.headers }).map(res => res.json()).catch(err => Observable.throw(err.json()));
   }
 
+  commuteHistory(email) {
+    return this.http.get(this.url.getUrl().commute + '?email=' + email, { headers: this.headers }).map(res => res.json()).catch(err => Observable.throw(err.json()));
+  }
 }
