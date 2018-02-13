@@ -35,7 +35,8 @@ export class HttpProvider {
       email: data.email,
       kind: data.kind
     }
-    return this.http.post(this.url.getUrl().commute, body, {headers: this.headers}).map(res => res.json());
+    console.log('data :', data);
+    return this.http.post(this.url.getUrl().commute, body, { headers: this.headers }).map(res => res.json()).catch(err => Observable.throw(err.json()));
   }
 
 }

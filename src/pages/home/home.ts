@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, Events } from 'ionic-angular';
 
 import * as firebase from 'firebase';
 
@@ -20,8 +20,17 @@ export class HomePage {
     outTime: ''
   }
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private loader: LoaderProvider, private globalsProvider: GlobalsProvider) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private loader: LoaderProvider, private globalsProvider: GlobalsProvider, public events: Events) {
+    events.subscribe("in", data => {
+      console.log("출근 처리: ", data);
+      this.user.inTime = data.time;
+    });
+    events.subscribe("out", data => {
+      console.log("퇴근 처리: ", data);
+      this.user.outTime = data.time;
+    });
   }
+
 
   ngOnInit() {
     let user = firebase.auth().currentUser;
