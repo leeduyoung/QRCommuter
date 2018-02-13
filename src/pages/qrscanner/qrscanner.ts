@@ -53,14 +53,13 @@ export class QrscannerPage {
                     
                     console.log(response);
                     if (this.method == 'in') {
-                      this.globalsProvider.inTime = moment().format('YYYY-MM-DD hh:mm:ss');
+                      this.globalsProvider.inTime = moment().format('YYYY-MM-DD HH:mm:ss');
                       this.events.publish('in', {time: this.globalsProvider.inTime});
                     }
                     else {
-                      this.globalsProvider.outTime = moment().format('YYYY-MM-DD hh:mm:ss');
+                      this.globalsProvider.outTime = moment().format('YYYY-MM-DD HH:mm:ss');
                       this.events.publish('out', {time: this.globalsProvider.outTime});
                     }
-
 
                     this.qrScanner.hide();
                     scanSub.unsubscribe();

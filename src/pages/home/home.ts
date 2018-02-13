@@ -26,12 +26,12 @@ export class HomePage {
 
   constructor(public navCtrl: NavController, public alertCtrl: AlertController, private loader: LoaderProvider, private globalsProvider: GlobalsProvider, public events: Events, private httpProvider: HttpProvider) {
     events.subscribe("in", data => {
-      console.log("출근 처리: ", data);
-      this.user.inTime = data.time;
+      console.log("출근 처리");
+      this.getTodayCommuteHistory();
     });
-    events.subscribe("out", data => {
-      console.log("퇴근 처리: ", data);
-      this.user.outTime = data.time;
+    events.subscribe("out", () => {
+      console.log("퇴근 처리");
+      this.getTodayCommuteHistory();
     });
   }
 
