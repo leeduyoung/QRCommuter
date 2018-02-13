@@ -10,8 +10,22 @@ export class LoaderProvider {
     console.log('Hello LoaderProvider Provider');
   }
 
-  show() {
-    this.loading = this.loadingCtrl.create();
+  show(content, duration) {
+    if (this.loading != null || this.loading != undefined)
+      this.hide();
+
+    if (content == "" || content == " ") {
+      this.loading = this.loadingCtrl.create({
+        content: content,
+        duration: duration
+      });
+    } else {
+      this.loading = this.loadingCtrl.create({
+        spinner: "hide",
+        content: content,
+        duration: duration
+      });
+    }
     this.loading.present();
   }
 

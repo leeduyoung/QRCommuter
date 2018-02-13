@@ -28,7 +28,7 @@ export class LoginPage {
   }
 
   login() {
-    this.loader.show();
+    this.loader.show('', ConstVariables.initLoadingTime);
     firebase.auth().signInWithEmailAndPassword(this.user.email, this.user.password)
       .then(response => {
         console.log(response);
@@ -39,7 +39,8 @@ export class LoginPage {
         console.log(error);
 
         if(!this.platform.is('mobileweb'))
-          this.toast.show(ConstVariables.loginErrorMessage, ConstVariables.errorLoadingTime, 'bottom').subscribe(toast => {console.log(toast);});
+          this.loader.show(ConstVariables.loginErrorMessage, ConstVariables.initLoadingTime);
+          // this.toast.show(ConstVariables.loginErrorMessage, ConstVariables.errorLoadingTime, 'bottom').subscribe(toast => {console.log(toast);});
       })
       .then(() => {
         this.loader.hide();
@@ -47,7 +48,7 @@ export class LoginPage {
   }
 
   goSignup() {
-    this.loader.show();
+    this.loader.show('', ConstVariables.initLoadingTime);
     this.navCtrl.push(SignupPage);
   }
 

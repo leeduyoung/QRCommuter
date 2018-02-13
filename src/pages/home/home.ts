@@ -8,6 +8,7 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { QrscannerPage } from '../qrscanner/qrscanner';
 import { GlobalsProvider } from '../../providers/globals';
 import { HttpProvider } from '../../providers/http/http.service';
+import { ConstVariables } from '../../providers/const';
 
 @Component({
   selector: 'page-home',
@@ -45,10 +46,10 @@ export class HomePage {
   }
 
   getTodayCommuteHistory() {
-    this.loader.show();
+    this.loader.show('', ConstVariables.initLoadingTime);
     this.httpProvider.commuteHistory(this.user.email)
       .subscribe(
-        response => {
+        (response: any) => {
           console.log(response);
 
           if (response.in.is_exist)
@@ -60,8 +61,9 @@ export class HomePage {
           }
 
         },
-        error => {
+        (error:any) => {
           console.log(error);
+          this.loader.show(error.message, ConstVariables.errorLoadingTime);
         },
         () => {
           this.loader.hide();
@@ -101,7 +103,7 @@ export class HomePage {
         {
           text: '예',
           handler: () => {
-            this.loader.show();
+            this.loader.show('', ConstVariables.initLoadingTime);
             this.firebaseLogout();
           }
         }
@@ -115,6 +117,7 @@ export class HomePage {
       // Sign-out successful.
     }).catch(error => {
       console.log(error);
+      this.loader.show(error.message, ConstVariables.errorLoadingTime);
     })
       .then(() => {
         this.loader.hide();

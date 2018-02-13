@@ -4,6 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import * as firebase from 'firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { GlobalsProvider } from '../../providers/globals';
+import { ConstVariables } from '../../providers/const';
 
 @IonicPage()
 @Component({
@@ -30,16 +31,17 @@ export class SignupPage {
   }
 
   signup() {
-    this.loader.show();
+    this.loader.show('', ConstVariables.initLoadingTime);
     firebase.auth().createUserWithEmailAndPassword(this.user.email, this.user.password)
-      .then(response => {
+      .then((response: any) => {
         console.log(response);
         this.firebaseUpdateProfile();
       })
-      .catch(error => {
+      .catch((error: any) => {
         var errorCode = error.code;
         var errorMessage = error.message;
         console.log(error);
+        this.loader.show(errorMessage, ConstVariables.errorLoadingTime);
       });
   }
 
@@ -53,6 +55,7 @@ export class SignupPage {
       // Update successful.
     }).catch(error => {
       console.log(error);
+      this.loader.show(error.message, ConstVariables.errorLoadingTime);
     })
     .then(() => {
       this.loader.hide();
