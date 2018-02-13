@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController, Events } from 'ionic-angular';
 
+import { RoundProgressModule, RoundProgressConfig } from 'angular-svg-round-progressbar';
 import * as firebase from 'firebase';
 import * as moment from 'moment';
 
@@ -24,7 +25,14 @@ export class HomePage {
     workedHour: '데이터가 없습니다.'
   }
 
-  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private loader: LoaderProvider, private globalsProvider: GlobalsProvider, public events: Events, private httpProvider: HttpProvider) {
+  constructor(public navCtrl: NavController, public alertCtrl: AlertController, private loader: LoaderProvider, private globalsProvider: GlobalsProvider, public events: Events, private httpProvider: HttpProvider, private config:
+    RoundProgressConfig) {
+    config.setDefaults({
+      color: '#4dcbcd',
+      background: '#e2e6f7',
+      duration: 800,
+      rounded: false
+    });
     events.subscribe("in", data => {
       console.log("출근 처리");
       this.getTodayCommuteHistory();
@@ -61,7 +69,7 @@ export class HomePage {
           }
 
         },
-        (error:any) => {
+        (error: any) => {
           console.log(error);
           this.loader.show(error.message, ConstVariables.errorLoadingTime);
         },
@@ -73,10 +81,10 @@ export class HomePage {
 
   setWorkedHour(t1, t2) {
     let tmp = moment(t1, 'YYYY-MM-DD hh:mm:ss').diff(moment(t2, 'YYYY-MM-DD hh:mm:ss'));
-    if(moment.duration(tmp).hours() == 0 && moment.duration(tmp).minutes() == 0) {
+    if (moment.duration(tmp).hours() == 0 && moment.duration(tmp).minutes() == 0) {
       return moment.duration(tmp).seconds() + '초';
     }
-    else if(moment.duration(tmp).hours() == 0) {
+    else if (moment.duration(tmp).hours() == 0) {
       return moment.duration(tmp).minutes() + '분 ' + moment.duration(tmp).seconds() + '초';
     }
     else {

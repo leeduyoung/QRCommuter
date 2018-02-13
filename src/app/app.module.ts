@@ -8,6 +8,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { QRScanner } from '@ionic-native/qr-scanner';
 import { Toast } from '@ionic-native/toast';
 
+import { RoundProgressModule, RoundProgressConfig } from 'angular-svg-round-progressbar';
+
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
@@ -35,7 +37,8 @@ import { GlobalsProvider } from '../providers/globals';
           backButtonText: ''
         } 
       }
-    })
+    }),
+    RoundProgressModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
