@@ -16,7 +16,8 @@
   <div class="home-round-progress-container">
       <div class="center-info">
           <p class="percent">{{current}}%</p>
-          <p class="description test">지났음</p>
+          <p class="description" *ngIf="current != 100">지났음</p>
+          <p class="description" *ngIf="current == 100">완성!</p>
       </div>
       <round-progress [current]="current" [max]="max"></round-progress>
   </div>

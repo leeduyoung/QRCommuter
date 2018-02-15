@@ -17,6 +17,9 @@ import { ConstVariables } from '../../providers/const';
 })
 export class HomePage {
 
+  maxMinute: number = 540;
+  current: number = 0;
+  max: number = 100;
   user: any = {
     name: '',
     email: '',
@@ -60,12 +63,15 @@ export class HomePage {
         (response: any) => {
           console.log(response);
 
-          if (response.in.is_exist)
+          if (response.in.is_exist) {
             this.user.inTime = response.in.checked_at;
+            this.current = this.setPercentage(moment().format(), this.user.inTime);
+          }
 
           if (response.out.is_exist) {
             this.user.outTime = response.out.checked_at;
             this.user.workedHour = this.setWorkedHour(this.user.outTime, this.user.inTime);
+            this.current = this.setPercentage(this.user.outTime, this.user.inTime);
           }
 
         },
@@ -77,19 +83,6 @@ export class HomePage {
           this.loader.hide();
         }
       );
-  }
-
-  setWorkedHour(t1, t2) {
-    let tmp = moment(t1, 'YYYY-MM-DD hh:mm:ss').diff(moment(t2, 'YYYY-MM-DD hh:mm:ss'));
-    if (moment.duration(tmp).hours() == 0 && moment.duration(tmp).minutes() == 0) {
-      return moment.duration(tmp).seconds() + '초';
-    }
-    else if (moment.duration(tmp).hours() == 0) {
-      return moment.duration(tmp).minutes() + '분 ' + moment.duration(tmp).seconds() + '초';
-    }
-    else {
-      return moment.duration(tmp).hours() + '시간 ' + moment.duration(tmp).minutes() + '분 ' + moment.duration(tmp).seconds() + '초';
-    }
   }
 
   refresh() {
@@ -141,6 +134,43 @@ export class HomePage {
     }
     else {
       // empty method..
+    }
+  }
+
+  /**
+   * 두 시간의 차이를 구하는 함수
+   * (t1 - t2)
+   * @param t1 
+   * @param t2 
+   * @returns X시간 Y분 Z초
+   */
+  setWorkedHour(t1, t2) {
+    let tmp = moment(t1, 'YYYY-MM-DD HH:mm:ss').diff(moment(t2, 'YYYY-MM-DD HH:mm:ss'));
+    if (moment.duration(tmp).hours() == 0 && moment.duration(tmp).minutes() == 0) {
+      return moment.duration(tmp).seconds() + '초';
+    }
+    else if (moment.duration(tmp).hours() == 0) {
+      return moment.duration(tmp).minutes() + '분 ' + moment.duration(tmp).seconds() + '초';
+    }
+    else {
+      return moment.duration(tmp).hours() + '시간 ' + moment.duration(tmp).minutes() + '분 ' + moment.duration(tmp).seconds() + '초';
+    }
+  }
+
+  /**
+   * 두 시간의 차이를 구하고, 9시간 100%를 기준으로 %를 반환하는 함수
+   * (t1 - t2)%
+   * @param t1 
+   * @param t2 
+   * @returns X%
+   */
+  setPercentage(t1, t2) {
+    let tmp = moment(t1, 'YYYY-MM-DD HH:mm:ss').diff(moment(t2, 'YYYY-MM-DD HH:mm:ss'));
+    if(moment.duration(tmp).minutes() > this.maxMinute) {
+      return this.max;
+    }
+    else {
+      return Math.floor(moment.duration(tmp).minutes() / this.maxMinute * 100);
     }
   }
 }
