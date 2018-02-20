@@ -65,7 +65,7 @@ export class HomePage {
 
           if (response.in.is_exist) {
             this.user.inTime = response.in.checked_at;
-            this.current = this.setPercentage(moment().format(), this.user.inTime);
+            this.current = this.setPercentage(moment().format('YYYY-MM-DD HH:mm:ss'), this.user.inTime);
           }
 
           if (response.out.is_exist) {
@@ -166,11 +166,12 @@ export class HomePage {
    */
   setPercentage(t1, t2) {
     let tmp = moment(t1, 'YYYY-MM-DD HH:mm:ss').diff(moment(t2, 'YYYY-MM-DD HH:mm:ss'));
-    if(moment.duration(tmp).minutes() > this.maxMinute) {
+    let currentHour = tmp / (1000 * 60);
+    if(currentHour > this.maxMinute) {
       return this.max;
     }
     else {
-      return Math.floor(moment.duration(tmp).minutes() / this.maxMinute * 100);
+      return Math.floor(currentHour / this.maxMinute * 100);
     }
   }
 }
