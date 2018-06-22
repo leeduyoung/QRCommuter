@@ -11,7 +11,6 @@ import { ConstVariables } from '../../providers/const';
 import { GlobalsProvider } from '../../providers/globals';
 
 
-@IonicPage()
 @Component({
   selector: 'page-qrscanner',
   templateUrl: 'qrscanner.html',

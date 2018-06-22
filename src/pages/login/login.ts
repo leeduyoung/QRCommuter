@@ -8,7 +8,6 @@ import * as firebase from 'firebase';
 import { LoaderProvider } from '../../providers/loader/loader';
 import { ConstVariables } from '../../providers/const';
 
-@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',

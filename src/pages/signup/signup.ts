@@ -6,7 +6,6 @@ import { LoaderProvider } from '../../providers/loader/loader';
 import { GlobalsProvider } from '../../providers/globals';
 import { ConstVariables } from '../../providers/const';
 
-@IonicPage()
 @Component({
   selector: 'page-signup',
   templateUrl: 'signup.html',
